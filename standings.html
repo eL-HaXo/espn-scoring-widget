@@ -1,0 +1,220 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<script
+  src="https://code.jquery.com/jquery-3.1.1.min.js"
+  integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+  crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.16.4/lodash.min.js"></script>
+<script type="text/javascript">
+function renderTable(sortKey='overall'){
+  var elm = document.getElementById('output');
+  var output = '';
+  var data = [{
+    // first points are through week 7
+    id: 4,
+    name: 'Gary',
+    logo: 'http://3.bp.blogspot.com/-2kJnD0vKJRk/UaZZDCAp7VI/AAAAAAAAMtQ/yqPmmk-DXCk/s1600/Arian-Foster-Wallpaper.jpg',
+    w: 5,
+    l: 2,
+    t: 0,
+    p: 'L',
+    points: [116.2, 102.1, 98.2, 52.6, 109.3, 92.7, 124.5, 61.2],
+    division: 1
+  }, {
+    id: 2,
+    name: 'Brian',
+    logo: 'http://www.bodhihigh.com/images/retailers/HerbanBranding.jpg',
+    w: 5,
+    l: 2,
+    t: 0,
+    p: 'L',
+    points: [81.7, 59.9, 115.5, 134.1, 123.6, 74.8, 119.0, 78.2],
+    division: 1
+  }, {
+    id: 8,
+    name: 'Kevin',
+    logo: 'http://i.imgur.com/4ZIsR2H.jpg',
+    w: 3,
+    l: 4,
+    t: 0,
+    p: 'W',
+    points: [102.4, 87.1, 118.4, 88.6, 121.4, 163.3, 98.9, 98.8],
+    division: 1
+  }, {
+    id: 5,
+    name: 'Jared',
+    logo: 'http://i6.photobucket.com/albums/y221/jrod691/Angery-guy2s.jpg',
+    w: 3,
+    l: 4,
+    t: 0,
+    p: 'W',
+    points: [131.7, 61.4, 93.7, 127.6, 80.6, 96.9, 128.0, 118.1],
+    division: 1
+  }, {
+    id: 9,
+    name: 'Maggio',
+    logo: 'https://xactlycorp.box.com/shared/static/ft6ppx335kkkkiim9g5s.jpg',
+    w: 3,
+    l: 4,
+    t: 0,
+    p: 'L',
+    points: [67.3, 109.8, 142.6, 75.2, 90.9, 79.7, 53.8, 62.2],
+    division: 2
+  }, {
+    id: 6,
+    name: 'Matt',
+    logo: 'http://g.espncdn.com/s/ffllm/logos/MatthewBerry-ChipWass/MatthewBerry-15.svg',
+    w: 5,
+    l: 2,
+    t: 0,
+    p: 'L',
+    points: [109.1, 88.9, 100.0, 118.0, 133.9, 113.2, 91.3, 90.8],
+    division: 2
+  }, {
+    id: 7,
+    name: 'Kenton',
+    logo: 'http://g.espncdn.com/s/ffllm/logos/SmackTalk-LeoEspinosa/Popcorn_Stripes-02.svg',
+    w: 5,
+    l: 2,
+    t: 0,
+    p: 'W',
+    points: [117.1, 92.9, 71.2, 69.8, 101.8, 80.6, 101.1, 121.5],
+    division: 2
+  }, {
+    id: 1,
+    name: 'Aaron',
+    logo: 'http://g.espncdn.com/lm-static/ffl16/images/default.svg',
+    w: 3,
+    l: 4,
+    t: 0,
+    p: 'W',
+    points: [149.9, 129.1, 90.2, 91.1, 60.3, 100.1, 111.0, 76.4],
+    division: 2
+  }, {
+    id: 3,
+    name: 'Chad',
+    logo: 'http://g.espncdn.com/s/ffllm/logos/SmackTalk-LeoEspinosa/u_mad_bro-09.svg',
+    w: 3,
+    l: 4,
+    t: 0,
+    p: 'W',
+    points: [85.9, 99.6, 73.1, 119.2, 94.8, 50.3, 121.6, 122.3],
+    division: 2
+  }, {
+    name: 'Tim',
+    logo: 'http://g.espncdn.com/s/ffllm/logos/SmackTalk-LeoEspinosa/u_mad_bro-09.svg',
+    w: 0,
+    l: 7,
+    t: 0,
+    p: 'L',
+    points: [83.1, 85.0, 68.1, 85.8, 105.3, 82.8, 49.9, 92.9],
+    division: 2
+  }];
+  var sumPoints = function(p){ return _.sum(p.points); };
+  var sortOrders = {
+    overall: {
+      order: ['w', 't', sumPoints],
+      dir: ['desc', 'desc', 'desc']
+    },
+    wins: {
+      order: ['w', 't', sumPoints],
+      dir: ['desc', 'desc', 'desc']
+    },
+    losses: {
+      order: ['l', 't', sumPoints],
+      dir: ['desc', 'asc', 'asc']
+    },
+    ties: {
+      order: ['t', 'w', sumPoints],
+      dir: ['desc', 'desc', 'desc']
+    },
+    points: {
+      order: [sumPoints, 'w', 't'],
+      dir: ['desc', 'desc', 'desc']
+    },
+    projected: {
+      order: [function(p) { if (p.p == 'W') return p.w + 1; else return p.w; }, sumPoints],
+      dir: ['desc', 'desc', 'desc']
+    },
+    this_week: {
+      order: [(p) => { return p.points[p.points.length-1]; }, 'p'],
+      dir: ['desc', 'desc']
+    }
+  }
+  var selectedSortOrder = _.get(sortOrders, sortKey);
+  data = data.map(function(p) {
+    if (p.p == 'W')
+      p.w++;
+    else if (p.p == 'L')
+      p.l++;
+    else
+      p.t++;
+
+    return p;
+  });
+  var dataSorted = _.orderBy(data, selectedSortOrder.order, selectedSortOrder.dir);
+  var output = '';
+
+  _.forEach(dataSorted, (team, i) => {
+    output += '\n' +
+    '<tr>' + '\n' +
+      '<td id="overall" align="center">'+(i+1)+'</td>' + '\n' +
+      '<td align="center"><a href="http://games.espn.com/ffl/clubhouse?leagueId=64486&teamId='+team.id+'"><img style="height: 23px; width: 23px;" src="'+team.logo+'" class="img-circle"></a></td>' + '\n' +
+      '<td id="name" align="center">'+team.name+'</td>' + '\n' +
+      '<td id="wins" align="right">'+team.w+'</td>' + '\n' +
+      '<td id="losses" align="right">'+team.l+'</td>' + '\n' +
+      '<td id="ties" align="right">'+team.t+'</td>' + '\n' +
+      '<td id="points" align="right">'+_.sum(team.points).toFixed(1)+'</td>' + '\n' +
+      '<td id="this_week" align="right">'+team.points[team.points.length-1]+'</td>' + '\n' +
+      '<td id="projected" align="center">'+team.p+'</td>' + '\n' +
+    '</tr>' + '\n';
+  });
+
+  elm.innerHTML = output;
+  document.getElementById('week').innerHTML = data[0].points.length;
+};
+
+function getData() {
+  var stadingsUrl = 'http://games.espn.com/ffl/scoreboard?leagueId=64486&seasonId=2016';
+  $.ajax({
+     url: stadingsUrl,
+     dataType: 'text',
+     success: function(data) {
+          var elements = $("<div>").html(data)[0].getElementsByTagName("ul")[0].getElementsByTagName("li");
+          for(var i = 0; i < elements.length; i++) {
+               var theText = elements[i].firstChild.nodeValue;
+               // Do something here
+          }
+     }
+});
+}
+</script>
+<style>
+.caret {
+  margin-left: 4px;
+  display: none;
+}
+</style>
+</head>
+<body onload="renderTable();">
+  <h1>Week <span id="week"></span> Standings</h1>
+  <table class="table">
+    <thead>
+      <tr>
+        <th align="center"; onclick="renderTable('overall');">Overall<span class="caret" /></th>
+        <th></th>
+        <th align="center" onclick="renderTable('name');">Name<span class="caret" /></th>
+        <th align="right"; onclick="renderTable('wins');">Wins<span class="caret" /></th>
+        <th align="right"; onclick="renderTable('losses');">Losses<span class="caret" /></th>
+        <th align="right"; onclick="renderTable('ties');">Ties<span class="caret" /></th>
+        <th align="right"; onclick="renderTable('points');">Points<span class="caret" /></th>
+        <th align="right"; onclick="renderTable('this_week');">This Week<span class="caret" /></th>
+        <th align="center" onclick="renderTable('projected');">Projected<span class="caret" /></th>
+      </tr>
+    </thead>
+    <tbody id="output"></tbody>
+  </table>
+<button onclick="getData();">Get Data</button>
+</body>
+</html>
